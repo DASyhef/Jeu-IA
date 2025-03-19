@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Exercice de Glisser-Déposer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>Classifiez les éléments suivants :</h1>
+
+  <!-- Champ pour saisir le nom ou l'identifiant -->
+  <div class="user-input">
+    <label for="user-name">Votre nom ou identifiant :</label>
+    <input type="text" id="user-name" name="user-name" required>
+  </div>
+
+  <!-- Zones de dépôt -->
+  <div class="drop-zones">
+    <div class="drop-zone" id="supervised">
+      <h2>IA Supervisée</h2>
+    </div>
+    <div class="drop-zone" id="unsupervised">
+      <h2>IA Non-Supervisée</h2>
+    </div>
+    <div class="drop-zone" id="deep-learning">
+      <h2>Deep Learning</h2>
+    </div>
+  </div>
+
+  <!-- Éléments à glisser -->
+  <div class="drag-items">
+    <!-- IA Supervisée -->
+    <div class="drag-item" draggable="true" data-correct="supervised">Détection de fraudes bancaires</div>
+    <div class="drag-item" draggable="true" data-correct="supervised">Analyse d’images médicales</div>
+    <div class="drag-item" draggable="true" data-correct="supervised">Contrôle d’accès par reconnaissance faciale</div>
+
+    <!-- IA Non-Supervisée -->
+    <div class="drag-item" draggable="true" data-correct="unsupervised">Segmentation des clients en marketing</div>
+    <div class="drag-item" draggable="true" data-correct="unsupervised">Détection de fraudes bancaires</div>
+    <div class="drag-item" draggable="true" data-correct="unsupervised">Maintenance prédictive industrielle</div>
+    <div class="drag-item" draggable="true" data-correct="unsupervised">Analyse des réseaux sociaux</div>
+    <div class="drag-item" draggable="true" data-correct="unsupervised">Détection d’anomalies dans la cybersécurité</div>
+
+    <!-- Deep Learning -->
+    <div class="drag-item" draggable="true" data-correct="deep-learning">Reconnaissance faciale</div>
+    <div class="drag-item" draggable="true" data-correct="deep-learning">Traduction automatique</div>
+    <div class="drag-item" draggable="true" data-correct="deep-learning">Voitures autonomes</div>
+    <div class="drag-item" draggable="true" data-correct="deep-learning">Génération d'images (IA générative)</div>
+  </div>
+
+  <!-- Bouton de soumission -->
+  <button id="submit">Soumettre</button>
+
+  <!-- Formulaire caché pour Formspree -->
+  <form id="results-form" action="https://formspree.io/f/xqapepzv" method="POST" style="display: none;">
+    <input type="hidden" name="user-name" id="user-name-input">
+    <input type="hidden" name="supervised" id="supervised-input">
+    <input type="hidden" name="unsupervised" id="unsupervised-input">
+    <input type="hidden" name="deep-learning" id="deep-learning-input">
+  </form>
+
+  <script src="script.js"></script>
+</body>
+</html>

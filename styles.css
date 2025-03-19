@@ -1,0 +1,59 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+  }
+  
+  .user-input {
+    margin-bottom: 20px;
+  }
+  
+  .user-input label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  
+  .user-input input {
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .drop-zones {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .drop-zone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+    min-height: 100px;
+  }
+  
+  .drag-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-bottom: 20px;
+  }
+  
+  .drag-item {
+    border: 1px solid #000;
+    padding: 10px;
+    margin: 5px;
+    cursor: grab;
+    background-color: #f9f9f9;
+  }
+  
+  .drag-item.dragging {
+    opacity: 0.5;
+  }
+  
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+  }
