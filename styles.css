@@ -17,10 +17,13 @@ body {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    width: 100%; /* Pleine largeur sur mobile */
+    max-width: 300px; /* Limite la largeur sur les grands écrans */
   }
   
   .drop-zones {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
     margin-bottom: 20px;
   }
@@ -28,7 +31,8 @@ body {
   .drop-zone {
     border: 2px dashed #ccc;
     padding: 20px;
-    width: 30%;
+    width: 300px; /* Pleine largeur sur mobile */
+    margin-bottom: 20px; /* Espace entre les zones sur mobile */
     text-align: center;
     min-height: 100px;
   }
@@ -46,6 +50,8 @@ body {
     margin: 5px;
     cursor: grab;
     background-color: #f9f9f9;
+    width: 100%; /* Pleine largeur sur mobile */
+    max-width: 200px; /* Limite la largeur sur les grands écrans */
   }
   
   .drag-item.dragging {
@@ -56,4 +62,40 @@ body {
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    width: 100%; /* Pleine largeur sur mobile */
+    max-width: 300px; /* Limite la largeur sur les grands écrans */
+    margin: 0 auto; /* Centrer le bouton */
+    display: block;
+  }
+  
+  /* Media Queries pour les écrans de tablette et mobile */
+  @media (max-width: 768px) {
+    .drop-zones {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  
+    .drop-zone {
+      width: 100%; /* Pleine largeur sur tablette et mobile */
+      margin-bottom: 10px; /* Espace réduit entre les zones */
+    }
+  
+    .drag-item {
+      width: 100%; /* Pleine largeur sur tablette et mobile */
+      max-width: none; /* Supprime la limite de largeur */
+    }
+  
+    button {
+      width: 100%; /* Pleine largeur sur tablette et mobile */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .user-input input {
+      width: 100%; /* Pleine largeur sur mobile */
+    }
+  
+    .drag-item {
+      font-size: 14px; /* Taille de police réduite sur mobile */
+    }
   }
