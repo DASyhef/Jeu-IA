@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse des Réponses IA</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f9f9f9; }
+        .container { display: flex; gap: 20px; flex-wrap: wrap; }
+        .panel { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); flex: 1; min-width: 300px; }
+        textarea { width: 100%; height: 80px; margin-bottom: 10px; }
+        button { background: #4CAF50; color: white; border: none; padding: 10px 15px; border-radius: 4px; cursor: pointer; margin-right: 10px; }
+        button.secondary { background: #2196F3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .consensus { background-color: #e6f7e6; }
+        .divergence { background-color: #fff3cd; }
+        .controversy { background-color: #ffdddd; }
+    </style>
+</head>
+<body>
+    <h1>Analyse des Réponses IA</h1>
+    
+    <div class="container">
+        <div class="panel">
+            <h2>Ajouter un participant</h2>
+            <input type="text" id="participant-name" placeholder="Nom" style="width: 100%; margin-bottom: 10px; padding: 8px;">
+            
+            <h3>Apprentissage Supervisé</h3>
+            <textarea id="supervised" placeholder="Ex: Analyse d'images médicales, Détection de fraudes"></textarea>
+            
+            <h3>Apprentissage Non-Supervisé</h3>
+            <textarea id="unsupervised" placeholder="Ex: Segmentation clients, Génération d'images"></textarea>
+            
+            <h3>Deep Learning</h3>
+            <textarea id="deeplearning" placeholder="Ex: Reconnaissance faciale, Voitures autonomes"></textarea>
+            
+            <button id="add-participant">Ajouter</button>
+        </div>
+        
+        <div class="panel">
+            <h2>Analyse Comparative</h2>
+            <div id="stats">
+                <p><strong>Participants :</strong> <span id="participant-count">0</span></p>
+            </div>
+            
+            <button id="export-csv" class="secondary">Exporter en CSV</button>
+            
+            <h3>Réponses par Catégorie</h3>
+            <select id="category-select">
+                <option value="supervised">Supervisé</option>
+                <option value="unsupervised">Non-Supervisé</option>
+                <option value="deeplearning">Deep Learning</option>
+            </select>
+            <table id="responses-table">
+                <thead>
+                    <tr>
+                        <th>Réponse</th>
+                        <th>Participants</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            
+            <h3>Points de Controverse (≥2 participants)</h3>
+            <table id="controversy-table">
+                <thead>
+                    <tr>
+                        <th>Réponse</th>
+                        <th>Classements Différents</th>
+                        <th>Participants</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <footer style="display: flex; justify-content: center; align-items: center; margin-top: 50px;">
+        <p style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
+            <img src="seagulls-dev.png" alt="Logo Seagulle-Dev" style="width: 50px; height: 50px;">
+            Seagulls Dev © - 2025 
+        </p>
+      </footer>
+    <script>
+        // Traductions
+        const TRANSLATIONS = {
+            supervised: "Supervisé",
+            unsupervised: "Non-Supervisé",
+            deeplearning: "Deep Learning",
+            consensus: "Consensus",
+            unique: "Unique",
+            controversy: "Controverse"
+        };
+
+        const participants = [];
+        
+        document.getElementById('add-participant').addEventListener('click', addParticipant);
+        document.getElementById('category-select').addEventListener('change', updateAnalysis);
+        document.getElementById('export-csv').addEventListener('click', exportToCSV);
+        
+        function addParticipant() {
+            const name = document.getElementById('participant-name').value.trim();
+            const supervised = parseResponses(document.getElementById('supervised').value);
+            const unsupervised = parseResponses(document.getElementById('unsupervised').value);
+            const deeplearning = parseResponses(document.getElementById('deeplearning').value);
+            
+            if (name && (supervised.length + unsupervised.length + deeplearning.length > 0)) {
+                participants.push({ name, supervised, unsupervised, deeplearning });
+                updateAnalysis();
+                clearForm();
+            } else {
+                alert("Veuillez entrer un nom et au moins une réponse");
+            }
+        }
+        
+        function parseResponses(text) {
+            return text.split(',').map(item => item.trim()).filter(item => item.length > 0);
+        }
+        
+        function clearForm() {
+            document.getElementById('participant-name').value = '';
+            document.getElementById('supervised').value = '';
+            document.getElementById('unsupervised').value = '';
+            document.getElementById('deeplearning').value = '';
+        }
+        
+        function updateAnalysis() {
+            updateParticipantCount();
+            updateCategoryTable();
+            updateControversyTable();
+        }
+        
+        function updateParticipantCount() {
+            document.getElementById('participant-count').textContent = participants.length;
+        }
+        
+        function updateCategoryTable() {
+            const category = document.getElementById('category-select').value;
+            const responseMap = {};
+            
+            participants.forEach(participant => {
+                participant[category].forEach(response => {
+                    if (!responseMap[response]) {
+                        responseMap[response] = [];
+                    }
+                    responseMap[response].push(participant.name);
+                });
+            });
+            
+            const tbody = document.querySelector('#responses-table tbody');
+            tbody.innerHTML = '';
+            
+            Object.entries(responseMap).forEach(([response, names]) => {
+                const row = document.createElement('tr');
+                row.className = names.length > 1 ? 'consensus' : 'divergence';
+                row.innerHTML = `
+                    <td>${response}</td>
+                    <td>${names.join(', ')}</td>
+                    <td>${names.length > 1 ? TRANSLATIONS.consensus : TRANSLATIONS.unique}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function updateControversyTable() {
+            const itemParticipants = {};
+            const itemCategories = {};
+            
+            participants.forEach(participant => {
+                ['supervised', 'unsupervised', 'deeplearning'].forEach(cat => {
+                    participant[cat].forEach(item => {
+                        if (!itemParticipants[item]) {
+                            itemParticipants[item] = new Set();
+                            itemCategories[item] = new Set();
+                        }
+                        itemParticipants[item].add(participant.name);
+                        itemCategories[item].add(TRANSLATIONS[cat]);
+                    });
+                });
+            });
+            
+            const tbody = document.querySelector('#controversy-table tbody');
+            tbody.innerHTML = '';
+            
+            Object.entries(itemCategories).forEach(([item, cats]) => {
+                if (cats.size > 1 && itemParticipants[item].size >= 2) {
+                    const row = document.createElement('tr');
+                    row.className = 'controversy';
+                    row.innerHTML = `
+                        <td>${item}</td>
+                        <td>${Array.from(cats).join(' vs ')}</td>
+                        <td>${Array.from(itemParticipants[item]).join(', ')}</td>
+                    `;
+                    tbody.appendChild(row);
+                }
+            });
+        }
+        
+        function exportToCSV() {
+            if (participants.length === 0) {
+                alert("Aucune donnée à exporter !");
+                return;
+            }
+            
+            let csv = "Participant;Apprentissage Supervisé;Apprentissage Non-Supervisé;Deep Learning\n";
+            
+            participants.forEach(participant => {
+                csv += `"${participant.name}";"${participant.supervised.join(', ')}";"${participant.unsupervised.join(', ')}";"${participant.deeplearning.join(', ')}"\n`;
+            });
+            
+            // Ajout des controverses
+            csv += "\n\nControverses (≥2 classements différents);Catégories;Participants\n";
+            const controversyRows = document.querySelectorAll('#controversy-table tbody tr');
+            controversyRows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                csv += `"${cells[0].textContent}";"${cells[1].textContent}";"${cells[2].textContent}"\n`;
+            });
+            
+            const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `analyse_ia_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+        }
+    </script>
+</body>
+</html>
